@@ -1,0 +1,140 @@
+.ProgressBar {
+  border-radius: 99px;
+  min-height: 2vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 0px;
+  border-radius: 99px;
+}
+
+.pb13 {
+  background: linear-gradient(
+    90deg,
+    #4e76ef 0%,
+    #82cdd3 209.96%,
+    #a0eebc 319.74%
+  );
+  height: 2vh;
+  border-radius: 99px;
+}
+
+.pb23 {
+  background: linear-gradient(
+    90deg,
+    #4e76ef -109.87%,
+    #82cdd3 98.36%,
+    #a0eebc 207.24%
+  );
+  height: 2vh;
+  border-radius: 99px;
+}
+
+.pb33 {
+  background: linear-gradient(
+    90deg,
+    #4e76ef -219.08%,
+    #82cdd3 -9.55%,
+    #a0eebc 100%
+  );
+
+  height: 2vh;
+  border-radius: 99px;
+}
+
+.item-box {
+  border: 0.5px solid #78809b;
+  border-radius: 16px;
+  padding: 18px;
+  margin: 6px 0px;
+}
+
+.item-box h4 {
+  margin: 0px;
+}
+
+.item-box p {
+  margin: 0px;
+  font-size: 16px;
+  font-weight: 275;
+}
+
+.item-box span {
+  margin: 0px;
+  font-size: 16px;
+  font-weight: 275;
+}
+
+.viewMore {
+  background: none;
+  color: #a0eebc;
+  font-weight: 300;
+  padding: 0px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+  text-decoration: underline;
+  font-weight: 275;
+}
+
+.viewMore svg {
+  margin-left: 4px;
+  color: #a0eebc;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 16px 0px;
+}
+
+.item-detailed-service {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 12px 0px;
+}
+
+.addon-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 6px 0px;
+}
+
+.addon-item-left {
+  display: flex;
+  align-items: center;
+}
+
+.addon-item svg {
+  margin-right: 8px;
+  color: #a0eebc;
+}
+
+.price-detail {
+  color: #9aa2c3;
+}
+
+.add-item {
+  border: 0.5px solid #78809b;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.add-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 6px 0px;
+}
+
+.add-item span, svg {
+    color: #9AA2C3;
+    font-weight: 275;
+}

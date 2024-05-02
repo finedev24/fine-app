@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  background-image: url("https://i.ibb.co/pvK0mVW/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  padding: 0px;
+  margin: 0px !important;
+}
+
+@font-face {
+  src: url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  background-color: #141720;
+  border-radius: 16px;
+  border: 1px solid #141720;
+  padding: 16px;
+  color: #fff;
+  margin: 12px 0px;
+  font-family: "Poppins", sans-serif;
+}
+
+input::placeholder {
+  color: #78809b;
+  font-family: "Poppins", sans-serif;
+}
+
+input:focus,
+input:hover {
+  outline: none; /* Quita el contorno al hacer focus */
+  border-color: transparent; /* Quita el borde al hacer hover */
+}
+
+button {
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(78, 118, 239, 1) 0%,
+    rgba(130, 205, 211, 1) 50%,
+    rgba(160, 238, 188, 1) 100%
+  );
+  border: none;
+  padding: 16px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  margin-top: 12px;
+}
+
+p {
+  font-weight: 275;
+}

@@ -1,0 +1,13 @@
+.logout {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px;
+    background: none;
+    margin: 0;
+    padding: 0;
+    font-weight: 275;
+    text-transform: initial;
+    text-decoration: underline;
+    color: rgba(255,255,255, 0.6);
+  }
