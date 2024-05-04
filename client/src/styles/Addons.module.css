@@ -43,6 +43,10 @@
   border-radius: 99px;
 }
 
+.formContent {
+  padding-bottom: 84px;
+}
+
 input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -262,7 +266,7 @@ input[type="checkbox"]:checked::before {
   margin-bottom: 12px;
   line-height: 1.2em;
   cursor: pointer;
-  padding: 12px 16px;
+  padding: 6px 16px;
 }
 
 .listSectionTitle {

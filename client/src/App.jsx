@@ -7,6 +7,7 @@ import Order from "./components/Order";
 import { supabase } from "./supabase/supabase.config";
 import Layout from "./containers/Layout";
 import RegFormProvider from "./providers/RegFormProvider";
+import { SubtotalProvider } from "./providers/SubtotalContext";
 
 function App() {
   const navigate = useNavigate();
@@ -25,13 +26,15 @@ function App() {
   }, []);
 
   return (
-      <RegFormProvider>
+    <RegFormProvider>
+      <SubtotalProvider>
         <div className="App">
           <Layout>
             <Outlet />
           </Layout>
         </div>
-      </RegFormProvider>
+      </SubtotalProvider>
+    </RegFormProvider>
   );
 }
 

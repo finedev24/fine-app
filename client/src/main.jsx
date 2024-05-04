@@ -18,8 +18,11 @@ import SelectService from "./components/SelectService";
 import SelectAddons from "./components/SelectAddons";
 import SelectDateBooking from "./components/SelectDateBooking";
 import AppointmentSummary from "./pages/AppointmentSummary";
-import ServicesList from "./pages/ServiceList.jsx";
-import Cart from "./pages/Cart";
+import AviabilityComponent from "./components/AviabilityComponent.jsx";
+import DatePicker from "./components/DatePicker.jsx";
+import PickerDate from './components/PickerDate.jsx'
+import Cart from "./pages/Cart"
+import Order from "./components/Order"
 
 const router = createBrowserRouter([
   {
@@ -35,7 +38,10 @@ const router = createBrowserRouter([
       { path: "/cart", element: <Cart /> },
       { path: "/date", element: <SelectDateBooking /> },
       { path: "/summary", element: <AppointmentSummary /> },
-      { path: "/servicelist", element: <ServicesList /> },
+      { path: "/avilability", element: <AviabilityComponent /> },
+      { path: "/datepicker", element: <DatePicker /> },
+      { path: "/pickerdate", element: <PickerDate /> },
+      { path: "/order", element: <Order/> },
       { path: "*", element: <NotFound /> },
     ],
   },

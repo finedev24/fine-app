@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { useRegFormContext } from "../providers/RegFormProvider";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,18 @@ import { FiClock } from "react-icons/fi";
 import style from "../styles/SelectDateBooking.module.css";
 
 function SelectDateBooking() {
+  const [addons, setAddons] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/aviability")
+      .then((response) => response.json())
+      .then((data) => setAddons(data.objects || []))
+      .catch((error) => {
+        console.error("Error al obtener los servicios:", error);
+        setAddons([]);
+      });
+  }, []);
+
   const navigate = useNavigate();
   const [, dispatch] = useRegFormContext();
   const {
@@ -17,13 +29,16 @@ function SelectDateBooking() {
 
   const onSubmit = (data) => {
     if (isValid) {
-      dispatch({ type: "SET_DATETIME_DATA", data: { date: data.date, time: data.time } });
-      console.log(data)
+      dispatch({
+        type: "SET_DATETIME_DATA",
+        data: { date: data.date, time: data.time },
+      });
+      console.log(data);
       navigate("/order");
     }
   };
 
-  return ( 
+  return (
     <div>
       <h2>Schedule your service</h2>
       <p>
