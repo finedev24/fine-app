@@ -75,6 +75,10 @@ input[type="radio"]:checked::before {
   border-radius: 99px;
 }
 
+.listContent {
+  padding-bottom: 72px;
+}
+
 .list img {
   margin-right: 48px;
 }

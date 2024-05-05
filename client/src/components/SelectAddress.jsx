@@ -26,7 +26,7 @@ function Address() {
     if (isValid) {
       dispatch({ type: "SET_ADDRES_DATA", data: values });
     }
-    navigate("/vehicle");
+    navigate("/booking/vehicle");
   };
 
   const isSubmitDisabled =
@@ -50,45 +50,47 @@ function Address() {
         Where will you schedule your detailing service?
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="text"
-          {...register("city", { value: cityDefaultValue })}
-          disabled
-        />
-        <input
-          type="text"
-          placeholder="Enter your address"
-          {...register("address")}
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        ></input>
-        <div className={styles.labelLine}>
+      <div className={styles.formContent}>
+          <input
+            type="text"
+            {...register("city", { value: cityDefaultValue })}
+            disabled
+          />
+          <input
+            type="text"
+            placeholder="Enter your address"
+            {...register("address")}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          ></input>
+          <div className={styles.labelLine}>
             <span>Your contact info:</span>
             <div className={styles.labelLineHr}>
               <hr />
             </div>
           </div>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          {...register("name")}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        ></input>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          {...register("email")}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <input
-          type="tel"
-          placeholder="Enter your phone number"
-          {...register("phone")}
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        ></input>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            {...register("name")}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></input>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            {...register("email")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
+          <input
+            type="tel"
+            placeholder="Enter your phone number"
+            {...register("phone")}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          ></input>
+        </div>
 
         <div className={styles.action}>
           <div className={styles["action-content"]}>

@@ -25,10 +25,9 @@ function SelectService() {
   const [order, dispatch] = useRegFormContext();
 
   const vehicleType = order.vehicle.vehicle;
-  console.log(vehicleType);
 
   useEffect(() => {
-    fetch("http://localhost:5000/services")
+    fetch("https://fine-node-1.onrender.com/services")
       .then((response) => response.json())
       .then((data) => setServices(data.objects || []))
       .catch((error) => {
@@ -101,7 +100,7 @@ function SelectService() {
       }
     }
   
-    navigate("/addons");
+    navigate("/booking/addons");
   };
   return (
     <div>

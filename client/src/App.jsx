@@ -4,7 +4,7 @@ import { Routes, Route, useNavigate, Outlet } from "react-router-dom";
 
 import Order from "./components/Order";
 
-import { supabase } from "./supabase/supabase.config";
+// import { supabase } from "./supabase/supabase.config";
 import Layout from "./containers/Layout";
 import RegFormProvider from "./providers/RegFormProvider";
 import { SubtotalProvider } from "./providers/SubtotalContext";
@@ -17,13 +17,13 @@ function App() {
     document.title = title;
   }, [title]);
 
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate("/login");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   supabase.auth.onAuthStateChange((event, session) => {
+  //     if (!session) {
+  //       navigate("/login");
+  //     }
+  //   });
+  // }, []);
 
   return (
     <RegFormProvider>

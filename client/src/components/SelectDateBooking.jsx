@@ -39,7 +39,7 @@ function SelectDateBooking() {
   const fetchAvailabilities = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/availability/anyStaffMember/WE4B32NILFMNZYBAWX2AGYTL?date=${formatDate(
+        `https://fine-node-1.onrender.com/availability/anyStaffMember/WE4B32NILFMNZYBAWX2AGYTL?date=${formatDate(
           selectedDate
         )}`
       );
@@ -83,7 +83,6 @@ function SelectDateBooking() {
         type: "SET_DATETIME_DATA",
         data: { date: data.date, time: data.time },
       });
-      console.log(data);
       navigate("/order");
     }
   };

@@ -76,7 +76,6 @@ const Order = () => {
       duracionFormateada += ` y ${minutos} minutos`;
     }
   }
-  console.log(order.service.name);
   const [formData, setFormData] = useState({
     serviceId: order.service.serviceId,
     staffId: "TMEUAFjgJJb4bj0C",
@@ -103,7 +102,7 @@ const Order = () => {
       // Include subtotal in customerNote
       const customerNote = `${formData.customerNote}\nAddons:\n${addonsInfo}\nSubtotal: ${subtotal}\nAddress: ${addressCustomer}\nPhone: ${phoneNumber}`;
 
-      const url = `http://localhost:5000/booking/create?serviceId=${formData.serviceId}&staffId=${formData.staffId}&startAt=${formData.startAt}&version=${formData.serviceVariationVersion}`;
+      const url = `https://fine-node-1.onrender.com/booking/create?serviceId=${formData.serviceId}&staffId=${formData.staffId}&startAt=${formData.startAt}&version=${formData.serviceVariationVersion}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -116,8 +115,8 @@ const Order = () => {
           givenName: formData.givenName,
         }),
       });
-      console.log("Booking created");
-      navigate("/success")
+      // console.log("Booking created");
+      navigate("/booking/success")
     } catch (error) {
       console.error("Error creating booking:", error);
     }

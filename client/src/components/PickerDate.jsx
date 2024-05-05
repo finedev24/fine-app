@@ -12,16 +12,14 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const regFormContext = useRegFormContext();
   const [order, dispatch] = regFormContext;
-  console.log(order);
   const navigate = useNavigate();
 
-  const baseUrl = "http://localhost:5000/availability/anyStaffMember/";
+  const baseUrl = "https://fine-node-1.onrender.com/availability/anyStaffMember/";
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
       try {
         const url = baseUrl + order.service.serviceId;
-        console.log("URL:", url);
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -100,9 +98,7 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
     if (dispatch) {
       const formattedDate = new Date(date).toISOString();
       dispatch({ type: "SET_DATE_DATA", data: formattedDate });
-      navigate("/order");
-      console.log(date);
-      console.log(order);
+      navigate("/booking/order");
     } else {
       console.error("Dispatch is not defined in RegFormContext");
     }

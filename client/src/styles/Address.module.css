@@ -1,5 +1,4 @@
 .ProgressBar {
-  border-radius: 99px;
   min-height: 2vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -27,6 +26,14 @@
   border-radius: 99px;
 }
 
+.formContent {
+  padding-bottom: 72px;
+}
+
+input[type=text], input[type=email], input[type=tel] {
+  width: 90%;
+}
+
 .action {
   position: fixed;
   bottom: 0px;
@@ -44,9 +51,8 @@
 }
 
 .action button:disabled {
-  opacity: 0.6; /* Cambia la opacidad según lo necesites */
+  opacity: 0.6;
 }
-
 
 .labelLine {
   display: flex;

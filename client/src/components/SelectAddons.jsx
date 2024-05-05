@@ -27,7 +27,7 @@ function SelectAddons() {
   const [order, dispatch] = useRegFormContext();
 
   useEffect(() => {
-    fetch("http://localhost:5000/services")
+    fetch("https://fine-node-1.onrender.com/services")
       .then((response) => response.json())
       .then((data) => setAddons(data.objects || []))
       .catch((error) => {
@@ -67,10 +67,6 @@ function SelectAddons() {
       }, 0);
 
       const subtotal = servicePrice + addonsTotalPrice;
-      console.log("Service Price:", servicePrice);
-      console.log("Addons Total Price:", addonsTotalPrice);
-      console.log("Subtotal:", subtotal);
-      console.log(order)
       dispatch({ type: "SET_SUBTOTAL", data: subtotal });
       setAddonsTotalPrice(subtotal);
       setSubtotal(subtotal);
@@ -94,10 +90,7 @@ function SelectAddons() {
       }, 0);
 
       const duration = serviceDuration + addonsTotalDuration;
-      console.log("Service Duration:", serviceDuration);
-      console.log("Addons Total Duration:", addonsTotalDuration);
-      console.log("Duration:", duration);
-      console.log(order)
+
       dispatch({ type: "SET_DURATION", data: duration });
       setAddonsTotalDuration(duration);
       setDuration(duration);
@@ -123,7 +116,7 @@ function SelectAddons() {
       });
       dispatch({ type: "SET_ADDONS_DATA", data: addonsData });
     }
-    navigate("/pickerdate");
+    navigate("/booking/pickerdate");
   };
 
   const totalAddonsPrice = selectedAddons.reduce((total, addonId) => {
@@ -170,17 +163,18 @@ function SelectAddons() {
                       </label>
                     </div>
                     <div className={styles.listSectionContent}>
-                      {addon.itemData.variations &&
-                        addon.itemData.variations.length > 0 && (
-                          <div key={addon.itemData.variations[0].id}>
-                            <span>
-                              {formatCurrency(
-                                addon.itemData.variations[0].itemVariationData
-                                  .priceMoney?.amount || 0
-                              )}
-                            </span>
-                          </div>
-                        )}
+                    {addon.itemData.variations &&
+  addon.itemData.variations.length > 0 && (
+    <div key={addon.itemData.variations[0].id}>
+      <span>
+        {addon.itemData.variations[0].itemVariationData.priceMoney?.amount !== 0
+          ? formatCurrency(
+              addon.itemData.variations[0].itemVariationData.priceMoney?.amount || 0
+            )
+          : "Variable"}
+      </span>
+    </div>
+  )}
                       <input
                         id={addon.id}
                         type="checkbox"

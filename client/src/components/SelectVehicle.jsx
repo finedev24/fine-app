@@ -18,8 +18,7 @@ function VehicleType() {
   const { register, handleSubmit } = useForm();
   const onSubmit = (values) => {
     dispatch({ type: "SET_VEHICLE_DATA", data: values });
-    navigate("/services");
-    console.log(values);
+    navigate("/booking/services");
   };
 
   const handleVehicleSelection = (vehicleType) => {
@@ -39,6 +38,7 @@ function VehicleType() {
       <h2>Vehicle</h2>
       <p>Select your type of vehicle</p>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.listContent}>
         <div
           className={`${styles.list} ${
             selectedVehicle === "sedan" ? styles.selected : ""
@@ -192,6 +192,7 @@ function VehicleType() {
               />
             </label>
           </div>
+        </div>
         </div>
 
         <div className={styles.action}>
