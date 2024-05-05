@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styles from "../styles/Address.module.css";
 import { useForm } from "react-hook-form";
 import { useRegFormContext } from "../providers/RegFormProvider";
@@ -9,13 +9,18 @@ import Order from "./Order";
 function Address() {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const cityDefaultValue = "MIAMI (FLORIDA)";
+  const stateDefaultValue = "FLORIDA";
 
   const [, dispatch] = useRegFormContext();
   const {
     register,
     handleSubmit,
     formState: { isValid },
-  } = useForm({ mode: 'onChange' }); // Cambiar a 'onChange' para validar en cada cambio
+  } = useForm({ mode: "onChange" });
 
   const onSubmit = (values) => {
     if (isValid) {
@@ -24,7 +29,12 @@ function Address() {
     navigate("/vehicle");
   };
 
-  const isSubmitDisabled = !isValid || address.trim() === ''; // Deshabilitar si no es válido o la dirección está vacía
+  const isSubmitDisabled =
+    !isValid ||
+    address.trim() === "" ||
+    name.trim() === "" ||
+    email.trim() === "" ||
+    phone.trim() === "";
 
   return (
     <div>
@@ -42,16 +52,51 @@ function Address() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
-          placeholder="Enter address"
+          {...register("city", { value: cityDefaultValue })}
+          disabled
+        />
+        <input
+          type="text"
+          placeholder="Enter your address"
           {...register("address")}
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         ></input>
+        <div className={styles.labelLine}>
+            <span>Your contact info:</span>
+            <div className={styles.labelLineHr}>
+              <hr />
+            </div>
+          </div>
+        <input
+          type="text"
+          placeholder="Enter your name"
+          {...register("name")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        ></input>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          {...register("email")}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        ></input>
+        <input
+          type="tel"
+          placeholder="Enter your phone number"
+          {...register("phone")}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        ></input>
+
         <div className={styles.action}>
           <div className={styles["action-content"]}>
             <div className={styles.action}>
               <div className={styles["action-content"]}>
-                <button type="submit" disabled={isSubmitDisabled}>CONTINUE</button>
+                <button type="submit" disabled={isSubmitDisabled}>
+                  CONTINUE
+                </button>
               </div>
             </div>
           </div>

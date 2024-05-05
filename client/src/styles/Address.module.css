@@ -46,3 +46,29 @@
 .action button:disabled {
   opacity: 0.6; /* Cambia la opacidad según lo necesites */
 }
+
+
+.labelLine {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+}
+
+.labelLineHr {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 60%;
+  border-color: #9aa2c3;
+}
+
+.labelLineHr hr {
+  width: 100%;
+  border: 0.5px solid #9aa2c3;
+}
+
+span.labelLine {
+  color: #9aa2c3;
+  font-weight: 275;
+  margin-right: 12px;
+}

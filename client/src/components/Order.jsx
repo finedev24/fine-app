@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRegFormContext } from "../providers/RegFormProvider";
 import style from "../styles/Order.module.css";
+import { useNavigate } from "react-router-dom";
 import { BiCar } from "react-icons/bi";
 import {
   CiStar,
@@ -17,6 +18,7 @@ import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 const Order = () => {
   const [order] = useRegFormContext();
   const [showMoreMap, setShowMoreMap] = useState({});
+  const navigate = useNavigate();
 
   function formatCurrency(amount) {
     const dollars = amount / 100;
@@ -81,9 +83,9 @@ const Order = () => {
     startAt: order.date,
     serviceVariationVersion: order.service.version,
     customerNote: "",
-    emailAddress: "camilo.gaitan09@gmail.com",
-    familyName: "Adios",
-    givenName: "Mendez",
+    emailAddress: order.address.email,
+    familyName: order.address.name,
+    givenName: "",
     addons: [],
   });
 
@@ -95,9 +97,11 @@ const Order = () => {
         .join("\n");
       // Calculate subtotal
       const subtotal = formatCurrency(order.subtotal);
+      const addressCustomer = order.address.address + " " + order.address.city;
+      const phoneNumber = order.address.phone;
 
       // Include subtotal in customerNote
-      const customerNote = `${formData.customerNote}\nAddons:\n${addonsInfo}\nSubtotal: ${subtotal}`;
+      const customerNote = `${formData.customerNote}\nAddons:\n${addonsInfo}\nSubtotal: ${subtotal}\nAddress: ${addressCustomer}\nPhone: ${phoneNumber}`;
 
       const url = `http://localhost:5000/booking/create?serviceId=${formData.serviceId}&staffId=${formData.staffId}&startAt=${formData.startAt}&version=${formData.serviceVariationVersion}`;
       const response = await fetch(url, {
@@ -113,6 +117,7 @@ const Order = () => {
         }),
       });
       console.log("Booking created");
+      navigate("/success")
     } catch (error) {
       console.error("Error creating booking:", error);
     }
@@ -336,7 +341,7 @@ const Order = () => {
             </div>
             <div className={style["box-detailed-content"]}>
               <span>Location</span>
-              {order.address && <p>{order.address.address}</p>}
+              {order.address && <p>{order.address.address} {order.address.city}</p>}
             </div>
           </div>
         </div>

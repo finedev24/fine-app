@@ -1,0 +1,51 @@
+.text-main {
+    text-align: center;
+}
+
+.success-container {
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    height: 100vh; /* Ajusta la altura según sea necesario */
+}
+
+.icon {
+    font-size: 48px; /* Ajusta el tamaño del icono según sea necesario */
+}
+
+.actionPrice {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(11, 23, 31, 0) 0%, rgba(0,0,0,1) 70%);
+  }
+  
+  .actionPrice p {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .actionPrice span{
+  margin-top: 12px;
+  font-weight: 275;
+  }
+  
+  .actionPrice button {
+    width: 100%;
+  }
+  
+  .actionPrice-content {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 2fr 6fr;
+  }
+  
+  .actionPrice-price{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }

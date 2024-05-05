@@ -23,6 +23,7 @@ import DatePicker from "./components/DatePicker.jsx";
 import PickerDate from './components/PickerDate.jsx'
 import Cart from "./pages/Cart"
 import Order from "./components/Order"
+import Success from "./components/success.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "/datepicker", element: <DatePicker /> },
       { path: "/pickerdate", element: <PickerDate /> },
       { path: "/order", element: <Order/> },
+      { path: "/success", element: <Success/> },
       { path: "*", element: <NotFound /> },
     ],
   },
