@@ -6,8 +6,14 @@ const Order = () => {
 
   return (
     <div>
-      <h3>Order</h3>
-      <hr />
+      <h2>Appointment Summary</h2>
+      <div className={style.labelLine}>
+        <span>Time</span>
+        <div className={style.labelLineHr}>
+          <hr />
+        </div>
+      </div>
+
       <h4>Dirección</h4>
       {order.address && (
         <>

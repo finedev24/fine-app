@@ -40,18 +40,32 @@ function SelectService() {
     formState: { isValid },
   } = useForm();
 
+  const toggleShowMore = (serviceId) => {
+    setShowMoreMap((prevMap) => ({
+      ...prevMap,
+      [serviceId]: !prevMap[serviceId],
+    }));
+  };
+
   const onSubmit = (values) => {
     if (isValid) {
       const selectedServiceData = services.find(
         (service) => service.id === selectedService
       );
       if (selectedServiceData) {
+        const serviceName = selectedServiceData.itemData.name;
+        const serviceDescription = selectedServiceData.itemData.description;
         const priceInCents =
           selectedServiceData.itemData.variations[0].itemVariationData
             .priceMoney?.amount || 0;
         dispatch({
           type: "SET_SERVICE_DATA",
-          data: { ...values, price: priceInCents }, // Elimina la división por 100 aquí
+          data: {
+            ...values,
+            name: serviceName,
+            price: priceInCents,
+            description: serviceDescription,
+          }, // Elimina la división por 100 aquí
         });
 
         // Calcular subtotal
@@ -122,6 +136,13 @@ function SelectService() {
                     <div
                       onClick={() => toggleShowMore(service.id)}
                       className={styles.viewMore}
+                      style={{
+                        display:
+                          service.itemData.description &&
+                          service.itemData.description !== ""
+                            ? "block"
+                            : "none",
+                      }}
                     >
                       View more{" "}
                       {showMoreMap[service.id] ? (

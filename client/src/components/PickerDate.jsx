@@ -3,6 +3,8 @@ import { DatePicker } from "antd";
 import moment from "moment";
 import { useRegFormContext } from "../providers/RegFormProvider";
 import { useNavigate } from "react-router-dom";
+import { FiClock } from "react-icons/fi";
+import style from "../styles/SelectDateBooking.module.css";
 
 const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
   const [availabilities, setAvailabilities] = useState([]);
@@ -120,24 +122,50 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
     return [year, month, day].join("-");
   };
 
-
   return (
     <div className="availability">
-      <h4> Select appointment date </h4>
-      <DatePicker
-        format="YYYY-MM-DD"
-        disabledDate={(current) => current && current < moment().endOf("day")}
-        showTime={false} // No muestra el selector de hora
-        allowClear={false}
-        onChange={handleDateChange}
-      />
-      <h4> Available Times </h4>
+      <h2>Schedule your service</h2>
       <p>
-        {" "}
-        You can schedule an appointment between 4 hours and 30 days ahead of
-        time.{" "}
+        Please select a day and time that works for you, keeping in mind the
+        estimated duration of service.
       </p>
-      <div id="available-times">{availableTimes}</div>
+      <div className={style["duration-box"]}>
+        <div className={style["duration-box-icon"]}>
+          <FiClock />
+        </div>
+        <div className={style["duration-box-content"]}>
+          <span>Estimated duration of service</span>
+          <span>
+            <b>2 to 3 hours</b>
+          </span>
+        </div>
+      </div>
+
+      <div className={style["select-datetime-item"]}>
+        <div className={style.labelLine }>
+          <span>Date</span>
+          <div className={style.labelLineHr}>
+            <hr />
+          </div>
+        </div>
+        <DatePicker
+          format="YYYY-MM-DD"
+          disabledDate={(current) => current && current < moment().endOf("day")}
+          showTime={false} // No muestra el selector de hora
+          allowClear={false}
+          onChange={handleDateChange}
+        />
+      </div>
+
+      <div className={style["select-datetime-item"]}>
+        <div className={style.labelLine}>
+          <span>Time</span>
+          <div className={style.labelLineHr}>
+            <hr />
+          </div>
+        </div>
+        <div id="available-times" className={style["available-times"]}>{availableTimes}</div>
+      </div>
     </div>
   );
 };

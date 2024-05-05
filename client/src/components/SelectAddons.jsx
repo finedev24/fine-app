@@ -80,17 +80,17 @@ function SelectAddons() {
 
   const onSubmit = (values) => {
     if (isValid) {
-      dispatch({ type: "SET_ADDONS_DATA", data: { addons: selectedAddons } });
-
-      selectedAddons.forEach((addonId) => {
+      const addonsData = selectedAddons.map((addonId) => {
         const addon = addons.find((addon) => addon.id === addonId);
         const addonPrice =
           addon.itemData.variations[0].itemVariationData.priceMoney.amount;
-        dispatch({
-          type: "SET_ADDON_DATA",
-          data: { addonId, addonPrice },
-        });
+        return {
+          addonId: addonId,
+          addonPrice: addonPrice,
+          addonName: addon.itemData.name, // Agregar el nombre del addon
+        };
       });
+      dispatch({ type: "SET_ADDONS_DATA", data: addonsData });
     }
     navigate("/pickerdate");
   };

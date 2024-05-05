@@ -30,14 +30,29 @@ input[type="time"] {
   width: calc(100% - 32px);
 }
 
-.select-datetime-item label {
+.select-datetime-item span {
   padding-right: 12px;
   color: #9aa2c3;
+}
+
+.available-times {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important  ;
+  grid-column-gap: 8px;
+  grid-row-gap: 2px;
+}
+
+.select-datetime-item button {
+  text-transform: uppercase;
+  font-weight: 200;
+  border: 0.5px solid #78809b;
+  background: none;
 }
 
 .labelLine {
   display: flex;
   flex-direction: row;
+  margin-bottom: 12px;
 }
 
 .labelLineHr {

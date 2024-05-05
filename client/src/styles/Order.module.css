@@ -1,0 +1,111 @@
+.picker-date span {
+  padding-right: 12px;
+  color: #9aa2c3;
+}
+
+.labelLine {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+}
+
+.labelLineHr {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 50%;
+  border-color: #9aa2c3;
+}
+
+.labelLineHr hr {
+  width: 100%;
+  border: 0.5px solid #9aa2c3;
+}
+
+.box-container {
+  border: 0.5px solid #78809b;
+  border-radius: 12px;
+  padding: 20px 16px;
+  background-color: rgba(24, 30, 52, 0.6);
+}
+
+.box-container hr {
+  border: 0.5px solid #78809b;
+  margin: 16px 0px;
+}
+
+.box-detailed {
+  display: grid;
+  grid-template-columns: 1fr 8fr 4fr;
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+}
+
+.box-detailed-second {
+  display: grid;
+  grid-template-columns: 1fr 8fr;
+}
+
+.box-detailed-icon svg {
+  color: #a0eebc;
+  width: 24px;
+  height: 24px;
+}
+
+.box-item p,
+.box-detailed-content p,
+.box-extra p {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.box-extra p {
+  font-size: 14px;
+  font-weight: 275;
+  color: #9aa2c3;
+}
+
+.addon-item-detailed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.viewMore {
+  background: none;
+  color: #a0eebc;
+  font-weight: 300;
+  padding: 0;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.viewMore svg {
+  margin-left: 4px;
+  color: #a0eebc;
+}
+
+.service-description {
+  font-size: 14px;
+  padding: 2px 0;
+  font-weight: 275;
+  color: #9aa2c3;
+}
+
+p.second-line {
+  font-weight: 200;
+  color: #9aa2c3;
+}
+
+.box-extra {
+  padding: 6px 0;
+}
+
+.container-resume {
+  padding-bottom: 24px;
+}

@@ -16,11 +16,15 @@ const reducer = (order, action) => {
     case "SET_SERVICE_DATA": {
       return { ...order, service: action.data };
     }
+
+    case "SET_ADDONS_DATA": {
+      return { ...order, addons: action.data };
+    }
     case "SET_ADDON_DATA": {
       const { addonId, addonPrice } = action.data;
       return {
         ...order,
-        addons: {
+        addon: {
           ...order.addons,
           [addonId]: addonPrice,
         },
