@@ -22,6 +22,13 @@ function VehicleType() {
     console.log(values);
   };
 
+  const handleVehicleSelection = (vehicleType) => {
+    setSelectedVehicle(vehicleType);
+    // Aquí podrías hacer algo más si necesitas
+  };
+
+  const isSubmitDisabled = !(selectedVehicle && vehicleNature);
+
   return (
     <div>
       <div className={styles.ProgressBar}>
@@ -68,7 +75,7 @@ function VehicleType() {
             <input
               id="suv"
               type="radio"
-              value="suv"
+              value="suv's"
               name="vehicle"
               {...register("vehicle")}
             />
@@ -189,7 +196,9 @@ function VehicleType() {
 
         <div className={styles.action}>
           <div className={styles["action-content"]}>
-            <button type="submit">Enviar</button>
+            <button type="submit" disabled={isSubmitDisabled}>
+              CONTINUE
+            </button>
           </div>
         </div>
       </form>

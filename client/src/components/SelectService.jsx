@@ -11,10 +11,10 @@ function formatCurrency(amount) {
   const formatted = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 2, // Cambiar a 2 para mostrar los centavos
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(dollars);
-  return formatted;
+  return formatted.replace(/(\.|,)00$/g, "");
 }
 
 function SelectService() {
@@ -23,6 +23,9 @@ function SelectService() {
   const [showMoreMap, setShowMoreMap] = useState({});
   const navigate = useNavigate();
   const [order, dispatch] = useRegFormContext();
+
+  const vehicleType = order.vehicle.vehicle;
+  console.log(vehicleType);
 
   useEffect(() => {
     fetch("http://localhost:5000/services")
@@ -53,34 +56,53 @@ function SelectService() {
         (service) => service.id === selectedService
       );
       if (selectedServiceData) {
-        const serviceName = selectedServiceData.itemData.name;
-        const serviceDescription = selectedServiceData.itemData.description;
-        const priceInCents =
-          selectedServiceData.itemData.variations[0].itemVariationData
-            .priceMoney?.amount || 0;
-        dispatch({
-          type: "SET_SERVICE_DATA",
-          data: {
-            ...values,
-            name: serviceName,
-            price: priceInCents,
-            description: serviceDescription,
-          }, // Elimina la división por 100 aquí
-        });
-
-        // Calcular subtotal
-        const servicePrice = priceInCents / 100;
-        const addonsTotalPrice = Object.values(order.addons).reduce(
-          (total, addonPrice) => total + addonPrice,
-          0
+        const selectedVariation = selectedServiceData.itemData.variations.find(variation =>
+          variation.itemVariationData.name.toLowerCase().includes(vehicleType.toLowerCase())
         );
-        const subtotal = servicePrice + addonsTotalPrice;
-        dispatch({ type: "SET_SUBTOTAL", data: subtotal });
+  
+        if (selectedVariation) {
+          const serviceName = selectedVariation.itemVariationData.name;
+          const serviceDescription = selectedServiceData.itemData.description;
+          const serviceVersion = selectedVariation.version;
+          const serviceId = selectedVariation.id;
+          const serviceDuration = selectedVariation.itemVariationData.serviceDuration;
+          const priceInCents = selectedVariation.itemVariationData.priceMoney?.amount || 0;
+  
+          dispatch({
+            type: "SET_SERVICE_DATA",
+            data: {
+              ...values,
+              serviceId: serviceId,
+              name: serviceName,
+              price: priceInCents,
+              description: serviceDescription,
+              version: serviceVersion,
+              duration: serviceDuration,
+            },
+          });
+  
+          const servicePrice = priceInCents / 100;
+          const addonsTotalPrice = Object.values(order.addons).reduce(
+            (total, addonPrice) => total + addonPrice,
+            0
+          );
+          const subtotal = servicePrice + addonsTotalPrice;
+          dispatch({ type: "SET_SUBTOTAL", data: subtotal });
+  
+          const serviceFormatedDuration = serviceDuration / 60000;
+  
+          const addonsTotalDuration = Object.values(order.addons).reduce(
+            (totalDuration, addonDuration) => totalDuration + addonDuration,
+            0
+          );
+          const duration = serviceFormatedDuration + addonsTotalDuration;
+          dispatch({ type: "SET_DURATION", data: duration });
+        }
       }
     }
+  
     navigate("/addons");
   };
-
   return (
     <div>
       <div className={styles.ProgressBar}>
@@ -92,126 +114,130 @@ function SelectService() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formContent}>
           <div>
-            {services.map((service) => (
-              <div
-                key={service.id}
-                className={`${styles.list} ${
-                  selectedService === service.id ? styles.selected : ""
-                }`}
-                onClick={() => {
-                  setSelectedService(service.id);
-                  document.getElementById(service.id).click();
-                }}
-              >
-                <div className={styles.listSection}>
-                  <div className={styles.listSectionTitle}>
-                    <label htmlFor={service.id} style={{ cursor: "pointer" }}>
-                      {service.itemData.name &&
-                        service.itemData.name
-                          .split(" - ")
-                          .map((line, index) => (
-                            <React.Fragment key={index}>
-                              <span
-                                className={
-                                  index === 0
-                                    ? styles["first-line"]
-                                    : styles["second-line"]
-                                }
-                              >
-                                {line}
-                              </span>
-                              <br />
-                            </React.Fragment>
-                          ))}
-                      <input
-                        id={service.id}
-                        type="radio"
-                        value={service.id}
-                        name="service"
-                        {...register("service")}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.listSectionContent}>
-                    <div
-                      onClick={() => toggleShowMore(service.id)}
-                      className={styles.viewMore}
-                      style={{
-                        display:
-                          service.itemData.description &&
-                          service.itemData.description !== ""
-                            ? "block"
-                            : "none",
-                      }}
+          {services
+  .filter((service) =>
+    vehicleType.toLowerCase() === 'motorcycle' ?
+    service.itemData.name.toLowerCase().includes(vehicleType.toLowerCase()) :
+    service.itemData.variations.some(variation =>
+      variation.itemVariationData.name.toLowerCase().includes(vehicleType.toLowerCase())
+    )
+  )
+  .map((service) => {
+    const variations = service.itemData.variations.filter(variation =>
+      variation.itemVariationData.name.toLowerCase().includes(vehicleType.toLowerCase())
+    );
+
+    return (
+      <div
+        key={service.id}
+        className={`${styles.list} ${
+          selectedService === service.id ? styles.selected : ""
+        }`}
+        onClick={() => {
+          setSelectedService(service.id);
+          document.getElementById(service.id).click();
+        }}
+      >
+        <div className={styles.listSection}>
+          <div className={styles.listSectionTitle}>
+            <label htmlFor={service.id} style={{ cursor: "pointer" }}>
+              {variations.length > 0 &&
+                variations.map((variation) => (
+                  <React.Fragment key={variation.id}>
+                    <span
+                      className={styles["first-line"]}
                     >
-                      View more{" "}
-                      {showMoreMap[service.id] ? (
-                        <SlArrowUp />
-                      ) : (
-                        <SlArrowDown />
-                      )}
-                    </div>
-                    {service.itemData.variations &&
-                      service.itemData.variations.length > 0 && (
-                        <div key={service.itemData.variations[0].id}>
-                          {formatCurrency(
-                            service.itemData.variations[0].itemVariationData
-                              .priceMoney?.amount || 0
-                          )}
-                        </div>
-                      )}
-                  </div>
-                  <div className={styles.listSectionExtra}>
-                    {showMoreMap[service.id] && (
-                      <div className={styles.listFeature}>
-                        {service.itemData.description
-                          .split("\n")
-                          .map((feature, index) => (
-                            <div key={index} className={styles.featureItem}>
-                              <div className={styles.featureIcon}>
-                                <FiCheck
-                                  style={{
-                                    color: "#A0EEBC",
-                                    marginRight: "6px",
-                                  }}
-                                />
-                              </div>
-                              <div className={styles.featureContent}>
-                                {feature}
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                      {variation.itemVariationData.name}
+                    </span>
+                    <br />
+                  </React.Fragment>
+                ))}
+              <input
+                id={service.id}
+                type="radio"
+                value={service.id}
+                name="service"
+                {...register("service")}
+              />
+            </label>
+          </div>
+          <div className={styles.listSectionContent}>
+            <div
+              onClick={() => toggleShowMore(service.id)}
+              className={styles.viewMore}
+              style={{
+                display:
+                  service.itemData.description &&
+                  service.itemData.description !== ""
+                    ? "block"
+                    : "none",
+              }}
+            >
+              View more{" "}
+              {showMoreMap[service.id] ? (
+                <SlArrowUp />
+              ) : (
+                <SlArrowDown />
+              )}
+            </div>
+            {variations.length > 0 && (
+              <div key={variations[0].id}>
+                {formatCurrency(
+                  variations[0].itemVariationData
+                    .priceMoney?.amount || 0
+                )}
               </div>
-            ))}
+            )}
+          </div>
+          <div className={styles.listSectionExtra}>
+            {showMoreMap[service.id] && (
+              <div className={styles.listFeature}>
+                {service.itemData.description
+                  .split("\n")
+                  .map((feature, index) => (
+                    <div key={index} className={styles.featureItem}>
+                      <div className={styles.featureIcon}>
+                        <FiCheck
+                          style={{
+                            color: "#A0EEBC",
+                            marginRight: "6px",
+                          }}
+                        />
+                      </div>
+                      <div className={styles.featureContent}>
+                        {feature}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
-        <div className={styles.action}>
-          <div className={styles["action-content"]}>
-            <button>Enviar</button>
+      </div>
+    );
+  })}
+          </div>
+        </div>
+        <div className={styles.actionPrice}>
+          <div className={styles["actionPrice-content"]}>
+            <div className={styles["actionPrice-price"]}>
+              <span>Subtotal:</span>
+              <p>
+                {selectedService
+                  ? formatCurrency(
+                      services.find((service) => service.id === selectedService)
+                        ?.itemData.variations[0].itemVariationData.priceMoney
+                        ?.amount
+                    )
+                  : "$0"}
+              </p>
+            </div>
+            <div className={styles["actionPrice-button"]}>
+              <button disabled={!selectedService}>CONTINUE</button>
+            </div>
           </div>
         </div>
       </form>
-      {/* {selectedService && (
-          <p>
-            Price:{" "}
-            {formatCurrency(
-              services.find((service) => service.id === selectedService)?.itemData
-                .variations[0].itemVariationData.priceMoney?.amount
-            )}
-          </p>
-        )} */}
-      {order.subtotal && <p>Subtotal: {formatCurrency(order.subtotal)}</p>}
-      <p>
-        {selectedService &&
-          `Price: ${formatCurrency(
-            services.find((service) => service.id === selectedService)?.itemData
-              .variations[0].itemVariationData.priceMoney?.amount
-          )}`}
-      </p>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "../styles/Address.module.css";
 import { useForm } from "react-hook-form";
 import { useRegFormContext } from "../providers/RegFormProvider";
@@ -8,19 +8,23 @@ import Order from "./Order";
 
 function Address() {
   const navigate = useNavigate();
+  const [address, setAddress] = useState("");
 
   const [, dispatch] = useRegFormContext();
   const {
     register,
     handleSubmit,
     formState: { isValid },
-  } = useForm();
+  } = useForm({ mode: 'onChange' }); // Cambiar a 'onChange' para validar en cada cambio
+
   const onSubmit = (values) => {
     if (isValid) {
       dispatch({ type: "SET_ADDRES_DATA", data: values });
     }
     navigate("/vehicle");
   };
+
+  const isSubmitDisabled = !isValid || address.trim() === ''; // Deshabilitar si no es válido o la dirección está vacía
 
   return (
     <div>
@@ -38,14 +42,16 @@ function Address() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
-          placeholder="Enter adress"
+          placeholder="Enter address"
           {...register("address")}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
         ></input>
         <div className={styles.action}>
           <div className={styles["action-content"]}>
             <div className={styles.action}>
               <div className={styles["action-content"]}>
-                <button type="submit">Enviar</button>
+                <button type="submit" disabled={isSubmitDisabled}>CONTINUE</button>
               </div>
             </div>
           </div>

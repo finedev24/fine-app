@@ -9,16 +9,18 @@ function formatCurrency(amount) {
   const formatted = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(dollars);
-  return formatted;
+  return formatted.replace(/(\.|,)00$/g, "");
 }
 
 function SelectAddons() {
   const [addonsTotalPrice, setAddonsTotalPrice] = useState(0);
+  const [addonsTotalDuration, setAddonsTotalDuration] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [addons, setAddons] = useState([]);
   const [selectedAddons, setSelectedAddons] = useState([]);
   const navigate = useNavigate();
@@ -68,14 +70,43 @@ function SelectAddons() {
       console.log("Service Price:", servicePrice);
       console.log("Addons Total Price:", addonsTotalPrice);
       console.log("Subtotal:", subtotal);
+      console.log(order)
       dispatch({ type: "SET_SUBTOTAL", data: subtotal });
       setAddonsTotalPrice(subtotal);
       setSubtotal(subtotal);
     }
   };
 
+  const calculateDuration = () => {
+    const selectedServiceData = order.service;
+    if (selectedServiceData) {
+      const serviceDuration = parseFloat(selectedServiceData.duration);
+
+      const addonsTotalDuration = selectedAddons.reduce((totalDuration, addonId) => {
+        const addon = addons.find((addon) => addon.id === addonId);
+        if (addon && addon.itemData.variations.length > 0) {
+          const addonDuration = parseFloat(
+            addon.itemData.variations[0].itemVariationData.serviceDuration
+          );
+          return totalDuration + addonDuration;
+        }
+        return totalDuration;
+      }, 0);
+
+      const duration = serviceDuration + addonsTotalDuration;
+      console.log("Service Duration:", serviceDuration);
+      console.log("Addons Total Duration:", addonsTotalDuration);
+      console.log("Duration:", duration);
+      console.log(order)
+      dispatch({ type: "SET_DURATION", data: duration });
+      setAddonsTotalDuration(duration);
+      setDuration(duration);
+    }
+  };
+
   useEffect(() => {
     calculateSubtotal();
+    calculateDuration();
   }, [selectedAddons]);
 
   const onSubmit = (values) => {
@@ -113,53 +144,65 @@ function SelectAddons() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formContent}>
           <div>
-            {addons.map((addon) => (
-              <div
-                key={addon.id}
-                className={`${styles.list} ${
-                  selectedAddons.includes(addon.id) ? styles.selected : ""
-                }`}
-                onClick={() => {
-                  handleAddonClick(addon.id);
-                  document.getElementById(addon.id).click();
-                }}
-              >
-                <div className={styles.listSection}>
-                  <div className={styles.listSectionLabel}>
-                    <label htmlFor={addon.id} style={{ cursor: "pointer" }}>
-                      {addon.itemData.name}
-                    </label>
-                  </div>
-                  <div className={styles.listSectionContent}>
-                    {addon.itemData.variations &&
-                      addon.itemData.variations.length > 0 && (
-                        <div key={addon.itemData.variations[0].id}>
-                          <span>
-                            {formatCurrency(
-                              addon.itemData.variations[0].itemVariationData
-                                .priceMoney?.amount || 0
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    <input
-                      id={addon.id}
-                      type="checkbox"
-                      value={addon.id}
-                      name="addon"
-                      {...register("addon")}
-                    />
+            {addons
+              .filter(
+                (service) =>
+                  service.itemData.categories &&
+                  service.itemData.categories.some(
+                    (category) => category.id === "GSIVANTROJJQVDLWDTAJFWMP"
+                  )
+              )
+              .map((addon) => (
+                <div
+                  key={addon.id}
+                  className={`${styles.list} ${
+                    selectedAddons.includes(addon.id) ? styles.selected : ""
+                  }`}
+                  onClick={() => {
+                    handleAddonClick(addon.id);
+                    document.getElementById(addon.id).click();
+                  }}
+                >
+                  <div className={styles.listSection}>
+                    <div className={styles.listSectionLabel}>
+                      <label htmlFor={addon.id} style={{ cursor: "pointer" }}>
+                        {addon.itemData.name}
+                      </label>
+                    </div>
+                    <div className={styles.listSectionContent}>
+                      {addon.itemData.variations &&
+                        addon.itemData.variations.length > 0 && (
+                          <div key={addon.itemData.variations[0].id}>
+                            <span>
+                              {formatCurrency(
+                                addon.itemData.variations[0].itemVariationData
+                                  .priceMoney?.amount || 0
+                              )}
+                            </span>
+                          </div>
+                        )}
+                      <input
+                        id={addon.id}
+                        type="checkbox"
+                        value={addon.id}
+                        name="addon"
+                        {...register("addon")}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            <p>Addons Total Price: {formatCurrency(totalAddonsPrice)}</p>
-            <p>Subtotal: {formatCurrency(subtotal)}</p>
+              ))}
           </div>
         </div>
-        <div className={styles.action}>
-          <div className={styles["action-content"]}>
-            <button type="submit">Enviar</button>
+        <div className={styles.actionPrice}>
+          <div className={styles["actionPrice-content"]}>
+            <div className={styles["actionPrice-price"]}>
+              <span>Subtotal:</span>
+              <p>{formatCurrency(subtotal)}</p>
+            </div>
+            <div className={styles["actionPrice-button"]}>
+              <button type="submit">CONTINUE</button>
+            </div>
           </div>
         </div>
       </form>

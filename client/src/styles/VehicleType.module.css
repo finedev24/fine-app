@@ -142,3 +142,7 @@ input[type="radio"]:checked::before {
 .action-content {
   padding: 24px;
 }
+
+.action button:disabled {
+  opacity: 0.6; /* Cambia la opacidad según lo necesites */
+}

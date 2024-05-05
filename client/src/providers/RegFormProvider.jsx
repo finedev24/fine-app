@@ -16,7 +16,6 @@ const reducer = (order, action) => {
     case "SET_SERVICE_DATA": {
       return { ...order, service: action.data };
     }
-
     case "SET_ADDONS_DATA": {
       return { ...order, addons: action.data };
     }
@@ -35,6 +34,9 @@ const reducer = (order, action) => {
     }
     case "SET_SUBTOTAL": {
       return { ...order, subtotal: action.data };
+    }
+    case "SET_DURATION": {
+      return { ...order, duration: action.data };
     }
     case "CHANGE_PERCENT": {
       return { ...order, percent: action.data };

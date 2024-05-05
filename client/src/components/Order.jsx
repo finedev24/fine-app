@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useRegFormContext } from "../providers/RegFormProvider";
 import style from "../styles/Order.module.css";
 import { BiCar } from "react-icons/bi";
@@ -7,7 +8,8 @@ import {
   CiRepeat,
   CiCalendar,
   CiClock2,
-  CiMapPin,
+  CiLocationOn,
+  CiDroplet,
 } from "react-icons/ci";
 import { FiCheck } from "react-icons/fi";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
@@ -52,6 +54,69 @@ const Order = () => {
       hour12: true,
     });
   };
+  const duracionEnMilisegundos = order.duration;
+  const duracionEnHoras = duracionEnMilisegundos / 3600000; // Convertir a horas
+
+  const horas = Math.floor(duracionEnHoras); // Obtener la parte entera de las horas
+  const minutos = Math.round((duracionEnHoras - horas) * 60); // Calcular los minutos restantes
+
+  let duracionFormateada = "";
+  if (horas === 1) {
+    duracionFormateada += `${horas} hora`;
+  } else {
+    duracionFormateada += `${horas} horas`;
+  }
+
+  if (minutos > 0) {
+    if (horas === 1) {
+      duracionFormateada += ` ${minutos} minutos`;
+    } else {
+      duracionFormateada += ` y ${minutos} minutos`;
+    }
+  }
+  console.log(order.service.name);
+  const [formData, setFormData] = useState({
+    serviceId: order.service.serviceId,
+    staffId: "TMEUAFjgJJb4bj0C",
+    startAt: order.date,
+    serviceVariationVersion: order.service.version,
+    customerNote: "",
+    emailAddress: "camilo.gaitan09@gmail.com",
+    familyName: "Adios",
+    givenName: "Mendez",
+    addons: [],
+  });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const addonsInfo = Object.values(order.addons)
+        .map((addon) => `${addon.addonName} - ${formatCurrency(addon.addonPrice)}`)
+        .join("\n");
+      // Calculate subtotal
+      const subtotal = formatCurrency(order.subtotal);
+
+      // Include subtotal in customerNote
+      const customerNote = `${formData.customerNote}\nAddons:\n${addonsInfo}\nSubtotal: ${subtotal}`;
+
+      const url = `http://localhost:5000/booking/create?serviceId=${formData.serviceId}&staffId=${formData.staffId}&startAt=${formData.startAt}&version=${formData.serviceVariationVersion}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customerNote: customerNote,
+          emailAddress: formData.emailAddress,
+          familyName: formData.familyName,
+          givenName: formData.givenName,
+        }),
+      });
+      console.log("Booking created");
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
+};
 
   return (
     <div>
@@ -87,7 +152,7 @@ const Order = () => {
           <div className={style["box-item"]}>
             <div className={`${style["box-detailed"]} ${style["service"]}`}>
               <div className={style["box-detailed-icon"]}>
-                <BiCar />
+                <CiDroplet />
               </div>
               <div className={style["box-detailed-content"]}>
                 <span>Service</span>
@@ -120,7 +185,10 @@ const Order = () => {
                 </div>
               )}
             </div>
-            <div className={style["box-extra"]}>
+            <div
+              className={style["box-extra"]}
+              onClick={() => toggleShowMore("service")}
+            >
               {order.service && (
                 <>
                   {order.service.description &&
@@ -143,6 +211,15 @@ const Order = () => {
                           ))}
                       </div>
                     )}
+                  <div
+                    className={style["service-price-detailed"]}
+                    style={{
+                      display: showMoreMap["service"] ? "flex" : "none",
+                    }}
+                  >
+                    <p>Price:</p>
+                    <p>{formatCurrency(order.service.price)}</p>
+                  </div>
                 </>
               )}
             </div>
@@ -208,7 +285,9 @@ const Order = () => {
         </div>
       </div>
 
-      <div className={style["container-resume"]}>
+      <div
+        className={`${style["container-resume"]} ${style["last-container"]}`}
+      >
         <div className={style["picker-date"]}>
           <div className={style.labelLine}>
             <span>Date, Time and Location</span>
@@ -241,17 +320,35 @@ const Order = () => {
               {order.date && <p>{formatTime(order.date)}</p>}
             </div>
           </div>
+          <div className={`${style["box-detailed-second"]} ${style["time"]}`}>
+            <div className={style["box-detailed-icon"]}></div>
+            <div className={style["box-detailed-content"]}>
+              <span>Duration of service</span>
+              {order.date && <p>{duracionFormateada}</p>}
+            </div>
+          </div>
           <hr />
           <div
             className={`${style["box-detailed-second"]} ${style["location"]}`}
           >
             <div className={style["box-detailed-icon"]}>
-              <CiMapPin />
+              <CiLocationOn />
             </div>
             <div className={style["box-detailed-content"]}>
               <span>Location</span>
               {order.address && <p>{order.address.address}</p>}
             </div>
+          </div>
+        </div>
+      </div>
+      <div className={style.actionPrice}>
+        <div className={style["actionPrice-content"]}>
+          <div className={style["actionPrice-price"]}>
+            <span>Subtotal:</span>
+            <p>{formatCurrency(order.subtotal)}</p>
+          </div>
+          <div className={style["actionPrice-button"]}>
+            <button onClick={handleSubmit}>BOOKING</button>
           </div>
         </div>
       </div>

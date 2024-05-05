@@ -10,16 +10,19 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
   const [availabilities, setAvailabilities] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const regFormContext = useRegFormContext(); // Obtener el contexto de RegFormProvider
-  const { order, dispatch } = regFormContext;
+  const regFormContext = useRegFormContext();
+  const [order, dispatch] = regFormContext;
+  console.log(order);
   const navigate = useNavigate();
+
+  const baseUrl = "http://localhost:5000/availability/anyStaffMember/";
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/availability/anyStaffMember/WE4B32NILFMNZYBAWX2AGYTL"
-        );
+        const url = baseUrl + order.service.serviceId;
+        console.log("URL:", url);
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -93,10 +96,9 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
 
   const handleTimeSelection = (availability) => {
     const { teamMemberId, date } = availability;
-    const [order, dispatch] = regFormContext;
 
     if (dispatch) {
-      const formattedDate = new Date(date).toISOString(); // Convertir la fecha a un formato legible
+      const formattedDate = new Date(date).toISOString();
       dispatch({ type: "SET_DATE_DATA", data: formattedDate });
       navigate("/order");
       console.log(date);
@@ -122,6 +124,27 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
     return [year, month, day].join("-");
   };
 
+  const duracionEnMilisegundos = order.duration;
+  const duracionEnHoras = duracionEnMilisegundos / 3600000; // Convertir a horas
+
+  const horas = Math.floor(duracionEnHoras); // Obtener la parte entera de las horas
+  const minutos = Math.round((duracionEnHoras - horas) * 60); // Calcular los minutos restantes
+
+  let duracionFormateada = "";
+  if (horas === 1) {
+    duracionFormateada += `${horas} hora`;
+  } else {
+    duracionFormateada += `${horas} horas`;
+  }
+
+  if (minutos > 0) {
+    if (horas === 1) {
+      duracionFormateada += ` ${minutos} minutos`;
+    } else {
+      duracionFormateada += ` y ${minutos} minutos`;
+    }
+  }
+
   return (
     <div className="availability">
       <h2>Schedule your service</h2>
@@ -136,13 +159,13 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
         <div className={style["duration-box-content"]}>
           <span>Estimated duration of service</span>
           <span>
-            <b>2 to 3 hours</b>
+            <b>{duracionFormateada}</b>
           </span>
         </div>
       </div>
 
       <div className={style["select-datetime-item"]}>
-        <div className={style.labelLine }>
+        <div className={style.labelLine}>
           <span>Date</span>
           <div className={style.labelLineHr}>
             <hr />
@@ -151,7 +174,7 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
         <DatePicker
           format="YYYY-MM-DD"
           disabledDate={(current) => current && current < moment().endOf("day")}
-          showTime={false} // No muestra el selector de hora
+          showTime={false}
           allowClear={false}
           onChange={handleDateChange}
         />
@@ -164,7 +187,9 @@ const PickerDate = ({ serviceId, serviceVersion, bookingId, timezone }) => {
             <hr />
           </div>
         </div>
-        <div id="available-times" className={style["available-times"]}>{availableTimes}</div>
+        <div id="available-times" className={style["available-times"]}>
+          {availableTimes}
+        </div>
       </div>
     </div>
   );

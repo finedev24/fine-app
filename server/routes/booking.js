@@ -49,6 +49,15 @@ router.post("/create", async (req, res, next) => {
   const familyName = req.body.familyName;
   const givenName = req.body.givenName;
 
+  console.log("serviceId:", serviceId);
+  console.log("serviceVariationVersion:", serviceVariationVersion);
+  console.log("staffId:", staffId);
+  console.log("startAt:", startAt);
+  console.log("customerNote:", customerNote);
+  console.log("emailAddress:", emailAddress);
+  console.log("familyName:", familyName);
+  console.log("givenName:", givenName);
+
   try {
     // Retrieve catalog object by the variation ID
     const { result: { object: catalogItemVariation } } = await catalogApi.retrieveCatalogObject(serviceId);
@@ -61,7 +70,7 @@ router.post("/create", async (req, res, next) => {
           {
             durationMinutes,
             serviceVariationId: serviceId,
-            serviceVariationVersion,
+            serviceVariationVersion: serviceVariationVersion,
             teamMemberId: staffId,
           }
         ],
